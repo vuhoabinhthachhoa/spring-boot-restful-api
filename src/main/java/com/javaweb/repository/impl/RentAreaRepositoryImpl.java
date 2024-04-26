@@ -12,6 +12,7 @@ import java.util.List;
 import com.javaweb.repository.RentAreaRepository;
 import org.springframework.stereotype.Repository;
 import com.javaweb.utils.GetDBConnectionUtil;
+import com.javaweb.utils.IsExistingParamUtil;
 
 @Repository
 public class RentAreaRepositoryImpl implements RentAreaRepository{
@@ -20,7 +21,7 @@ public class RentAreaRepositoryImpl implements RentAreaRepository{
 		String query = "SELECT* FROM rentarea";
 		String conditions = " WHERE 1=1";
 
-		if (iBuildingID != null ) {
+		if (IsExistingParamUtil.isExistingStringParam(iBuildingID.toString())) {
 			conditions += " AND buildingid = " + iBuildingID;
 		}
 		query += conditions;

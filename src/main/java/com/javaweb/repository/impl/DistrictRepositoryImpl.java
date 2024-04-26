@@ -1,15 +1,18 @@
 package com.javaweb.repository.impl;
 
-import com.javaweb.repository.entity.DistrictEntity;
+
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.javaweb.repository.DistrictRepository;
 import org.springframework.stereotype.Repository;
+
+import com.javaweb.repository.DistrictRepository;
+import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.utils.GetDBConnectionUtil;
+import com.javaweb.utils.IsExistingParamUtil;
 
 
 @Repository
@@ -20,7 +23,7 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 		String query = "SELECT* FROM District";
 		String conditions = " WHERE 1=1";
 
-		if (iDistrictID != null ) {
+		if (IsExistingParamUtil.isExistingStringParam(iDistrictID.toString())) {
 			conditions += " AND id = " + iDistrictID ;
 		}
 		query += conditions;

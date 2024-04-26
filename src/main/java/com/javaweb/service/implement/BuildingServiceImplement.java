@@ -1,10 +1,11 @@
 package com.javaweb.service.implement;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.javaweb.service.BuildingService;
 import com.javaweb.repository.entity.BuildingEntity;
@@ -21,7 +22,9 @@ public class BuildingServiceImplement implements BuildingService {
 	
 	@Autowired
 	private BuildingRepository buidldingRepository;
+	@Autowired
 	private DistrictRepository districtRepository;
+	@Autowired
 	private RentAreaRepository rentAreaRepository;
 	
 	String handleRentAreas(List<RentAreaEntity> rentAreas) {
@@ -45,16 +48,14 @@ public class BuildingServiceImplement implements BuildingService {
 	}
 	
 	@Override
-	public List<BuildingDTO> findBuildings(String iName, String iStreet, String iWard, String iDistrictName,
-			Long iNumberOfBasement, Long iFloorArea, String iDirection, String iLevel, Pair<Long, Long> iRentPrice, 
-			String iManagerName, String iManagerPhoneNumber, Long iStaffID, Pair<Long, Long> iRentArea,
-			List<String> iRentTypeName) {
+	public List<BuildingDTO> findBuildings(Map<String, Object> params, List<String> typeCode) {
 		
-		districtRepository.findDistrictByID(2L);
+		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(params, typeCode); 
 		
-		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(iName, iStreet, iWard, iDistrictName, 
-				iNumberOfBasement, iFloorArea,  iDirection, iLevel, iRentPrice, iManagerName, iManagerPhoneNumber, 
-				iStaffID, iRentArea, iRentTypeName); 
+		if(receivedData == null) {
+			return null;
+		}
+		
 		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
 		
 		for(BuildingEntity it : receivedData) { 

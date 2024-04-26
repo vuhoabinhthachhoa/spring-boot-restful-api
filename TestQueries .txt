@@ -1,0 +1,2 @@
+SELECT DISTINCT b.* FROM building b JOIN rentarea ra ON ra.buildingid=b.id  JOIN assignmentbuilding ab ON ab.buildingid=b.id  JOIN buildingrenttype brt ON b.id=brt.buildingid 
+JOIN renttype rt ON rt.id=brt.renttypeid  WHERE 1=1  AND b.numberofbasement = 1 AND ra.value >= 300 AND ra.value <= 600 AND b.rentprice >= 0 AND b.rentprice <= 100 AND ab.staffid = 3 AND rt.name IN (N'Tầng trệt', N'Nguyên căn')
