@@ -27,24 +27,18 @@ public class BuildingServiceImplement implements BuildingService {
 	@Autowired
 	private RentAreaRepository rentAreaRepository;
 	
-	String handleRentAreas(List<RentAreaEntity> rentAreas) {
-		int n = rentAreas.size();
-		if(n == 0) return "";
-		
-		String result = "";
-		int i  = 0;
-		for(RentAreaEntity rentArea : rentAreas) {
-			if(i == n - 1) {
-				result += rentArea.getValue();
-			}
-			else {
-				result += rentArea.getValue() + ", ";
-			}
-			
-			i++;
-		}
-		
-		return result;
+	
+	String convertRentAreasToString(List<RentAreaEntity> rentAreas) {
+	    if (rentAreas.isEmpty()) {
+	        return "";
+	    }
+
+	    List<String> values = new ArrayList<>();
+	    for (RentAreaEntity rentArea : rentAreas) {
+	        values.add(rentArea.getValue().toString());
+	    }
+
+	    return String.join(", ", values);
 	}
 	
 	@Override
@@ -67,7 +61,7 @@ public class BuildingServiceImplement implements BuildingService {
 		    String managerName = it.getManagerName();
 		    String managerPhoneNumber = it.getManagerPhoneNumber();
 		    Long floorArea = it.getFloorArea();
-		    String rentArea = handleRentAreas(rentAreaRepository.findRentAreaByBuildingID(it.getDistrictId()));
+		    String rentArea = convertRentAreasToString(rentAreaRepository.findRentAreaByBuildingID(it.getDistrictId()));
 		    String brokerageFee = String.format("%.1f", it.getBrokerageFee());
 		    
 		    result.add(new BuildingDTO(name, address, numberOfBasement, managerName, managerPhoneNumber, floorArea, rentArea, brokerageFee));
