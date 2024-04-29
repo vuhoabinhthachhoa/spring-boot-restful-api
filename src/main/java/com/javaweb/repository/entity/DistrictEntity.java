@@ -5,6 +5,8 @@ public class DistrictEntity {
 	private String code;
 	private String name;
 	
+	public DistrictEntity() {}
+	
 	public DistrictEntity(Long id, String code, String name) {
 		super();
 		this.id = id;

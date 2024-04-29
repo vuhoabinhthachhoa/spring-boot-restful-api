@@ -26,26 +26,19 @@ public class RentAreaRepositoryImpl implements RentAreaRepository{
 		}
 		query += conditions;
 		
-		Connection conn = GetDBConnectionUtil.getConnection();
-		if(conn == null) {
-			return null;
-		}
 		
 		List<RentAreaEntity> rentAreas = new ArrayList<>();
-		try(Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery(query)) {
+		 try (Connection conn = GetDBConnectionUtil.getConnection(); 
+	        		Statement stm = conn.createStatement(); 
+	        		ResultSet rs = stm.executeQuery(query.toString())) {
 			
 			while(rs.next()) {
-				Long id = rs.getLong("id");
-				Long value = rs.getLong("value");
-				Long buildingid = rs.getLong("buildingid");
-				
-				rentAreas.add(new RentAreaEntity(id, value, buildingid));
+				RentAreaEntity rentArea = new RentAreaEntity();
+				rentArea.setValue(rs.getLong("value"));
+				rentAreas.add(rentArea);
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Connection failed");
-			return null;
 		}
 
 		return rentAreas;

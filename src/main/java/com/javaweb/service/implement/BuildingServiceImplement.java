@@ -46,10 +46,6 @@ public class BuildingServiceImplement implements BuildingService {
 		
 		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(params, typeCode); 
 		
-		if(receivedData == null) {
-			return null;
-		}
-		
 		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
 		
 		for(BuildingEntity it : receivedData) { 

@@ -10,16 +10,9 @@ public class GetDBConnectionUtil {
 	static String USER = "root";
 	static String PASS = "Lecaotuanvu.2004_mysql";
 
-	public static Connection getConnection() {
-		Connection conn = null;
-
-		try {
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Connection failed");
-		}
-		return conn;
-	}
+	public static Connection getConnection() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        return conn;
+    }
 
 }

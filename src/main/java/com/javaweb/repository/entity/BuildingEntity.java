@@ -11,6 +11,8 @@ public class BuildingEntity {
 	private String managerPhoneNumber;
 	private double brokerageFee;
 	
+	public BuildingEntity() {};
+	
 	public BuildingEntity(String name, String street, String ward, Long districtId, Long numberOfBasement,
 			Long floorArea, String managerName, String managerPhoneNumber, double brokerageFee) {
 		super();
@@ -93,7 +95,7 @@ public class BuildingEntity {
 		return brokerageFee;
 	}
 
-	public void setManagerPhoneNumber(double brokerageFee) {
+	public void setBrokerageFee(double brokerageFee) {
 		this.brokerageFee = brokerageFee;
 	}
 	

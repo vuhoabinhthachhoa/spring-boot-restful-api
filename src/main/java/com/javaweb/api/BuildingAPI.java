@@ -22,11 +22,6 @@ public class BuildingAPI {
 			@RequestParam(value = "typecode", required = false) List<String> typeCode) {
 		List<BuildingDTO> result = buildingService.findBuildings(params, typeCode);
 		
-		if(result == null) {
-			// return corresponding HTTP status for server error
-			return null;
-		}
-		
 		return result;	
 	}
 }

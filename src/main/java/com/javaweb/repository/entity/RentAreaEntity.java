@@ -5,6 +5,8 @@ public class RentAreaEntity {
 	private Long value;
 	private Long buildingID;
 	
+	public RentAreaEntity() {}
+	
 	public RentAreaEntity(Long id, Long value, Long buildingID) {
 		super();
 		this.id = id;

@@ -108,36 +108,33 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
         joinWithTables(params, typeCode, query);
         selectConditions(params, typeCode, query);
-
-        Connection conn = GetDBConnectionUtil.getConnection();
-        if (conn == null) {
-            return null;
-        }
-
-        String sql = query.toString();
-        System.out.println(sql);
+        
+        // check query
+        System.out.println(query.toString());
 
         List<BuildingEntity> buildings = new ArrayList<>();
-        try (Statement stm = conn.createStatement(); ResultSet rs = stm.executeQuery(sql)) {
+        try (Connection conn = GetDBConnectionUtil.getConnection(); 
+        		Statement stm = conn.createStatement(); 
+        		ResultSet rs = stm.executeQuery(query.toString())) {
 
-            while (rs.next()) {
-                String buildingName = rs.getString("name");
-                String street = rs.getString("street");
-                String ward = rs.getString("ward");
-                long districtId = rs.getLong("districtid");
-                Long numberOfBasement = rs.getLong("numberofbasement");
-                Long floorArea = rs.getLong("floorarea");
-                String managerName = rs.getString("managername");
-                String managerPhoneNumber = rs.getString("managerphonenumber");
-                Double brokerageFee = rs.getDouble("brokeragefee");
+        	 while (rs.next()) {
+                 BuildingEntity buildingEntity = new BuildingEntity(); // Create an instance
 
-                buildings.add(new BuildingEntity(buildingName, street, ward, districtId, numberOfBasement, floorArea,
-                        managerName, managerPhoneNumber, brokerageFee));
-            }
+                 // Set properties
+                 buildingEntity.setName(rs.getString("name"));
+                 buildingEntity.setStreet(rs.getString("street"));
+                 buildingEntity.setWard(rs.getString("ward"));
+                 buildingEntity.setDistrictId(rs.getLong("districtid"));
+                 buildingEntity.setNumberOfBasement(rs.getLong("numberofbasement"));
+                 buildingEntity.setFloorArea(rs.getLong("floorarea"));
+                 buildingEntity.setManagerName(rs.getString("managername"));
+                 buildingEntity.setManagerPhoneNumber(rs.getString("managerphonenumber"));
+                 buildingEntity.setBrokerageFee(rs.getDouble("brokeragefee"));
+
+                 buildings.add(buildingEntity);
+             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Can not execute query!");
-            return null;
         }
 
         return buildings;

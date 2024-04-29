@@ -28,29 +28,20 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 		}
 		query += conditions;
 		
-		Connection conn = GetDBConnectionUtil.getConnection();
-		if(conn == null) {
-			return null;
-		}
-		
-		
-		try(Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery(query)) {
+		DistrictEntity district = new DistrictEntity(); 
+		try (Connection conn = GetDBConnectionUtil.getConnection(); 
+        		Statement stm = conn.createStatement(); 
+        		ResultSet rs = stm.executeQuery(query)) {
 			
-			if(rs.next()) {
-				Long id = rs.getLong("id");
-				String code = rs.getString("code");
-				String name = rs.getString("name");
-				
-				return new DistrictEntity(id, code, name);
+			while(rs.next()) {
+				district.setName(rs.getString("name"));
 			}
 
 		}catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Connection failed");
 		}
 		
-		return null;
+		return district;
 	}
 }
 
