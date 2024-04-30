@@ -1,6 +1,7 @@
 package com.javaweb.repository.entity;
 
 public class BuildingEntity {
+	private Long id;
 	private String name;
 	private String street;
 	private String ward;
@@ -11,11 +12,12 @@ public class BuildingEntity {
 	private String managerPhoneNumber;
 	private double brokerageFee;
 	
-	public BuildingEntity() {};
-	
-	public BuildingEntity(String name, String street, String ward, Long districtId, Long numberOfBasement,
+	public BuildingEntity() {}
+
+	public BuildingEntity(Long id, String name, String street, String ward, Long districtId, Long numberOfBasement,
 			Long floorArea, String managerName, String managerPhoneNumber, double brokerageFee) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.street = street;
 		this.ward = ward;
@@ -25,6 +27,14 @@ public class BuildingEntity {
 		this.managerName = managerName;
 		this.managerPhoneNumber = managerPhoneNumber;
 		this.brokerageFee = brokerageFee;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -90,14 +100,16 @@ public class BuildingEntity {
 	public void setManagerPhoneNumber(String managerPhoneNumber) {
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
-	
+
 	public double getBrokerageFee() {
 		return brokerageFee;
 	}
 
 	public void setBrokerageFee(double brokerageFee) {
 		this.brokerageFee = brokerageFee;
-	}
+	};
+	
+	
 	
 	
 }

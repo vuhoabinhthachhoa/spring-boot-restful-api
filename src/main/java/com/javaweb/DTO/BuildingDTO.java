@@ -9,6 +9,8 @@ public class BuildingDTO {
 	    private Long floorArea;
 	    private String rentArea; // Ex: 200, 300, 400
 	    private String brokerageFee; // Ex: 2.0 (1 precision)
+	    
+	    public BuildingDTO() {}
  	    
 		public BuildingDTO(String name, String address, Long numberOfBasement, String managerName,
 				String managerPhoneNumber, Long floorArea, String rentArea, String brokerageFee) {

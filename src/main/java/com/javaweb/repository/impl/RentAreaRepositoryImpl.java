@@ -17,12 +17,12 @@ import com.javaweb.utils.IsExistingParamUtil;
 @Repository
 public class RentAreaRepositoryImpl implements RentAreaRepository{
 	@Override
-	public List<RentAreaEntity> findRentAreaByBuildingID(Long iBuildingID) {
+	public List<RentAreaEntity> findRentAreaByBuildingID(Long iBuildingId) {
 		String query = "SELECT* FROM rentarea";
 		String conditions = " WHERE 1=1";
 
-		if (IsExistingParamUtil.isExistingStringParam(iBuildingID.toString())) {
-			conditions += " AND buildingid = " + iBuildingID;
+		if (IsExistingParamUtil.isExistingStringParam(iBuildingId.toString())) {
+			conditions += " AND buildingid = " + iBuildingId;
 		}
 		query += conditions;
 		
