@@ -11,7 +11,9 @@ import com.javaweb.service.BuildingService;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.DTO.BuildingDTO;
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingConverter;
+import com.javaweb.converter.BuildingSearchBuilderConverter;
 
 
 @Service
@@ -24,8 +26,8 @@ public class BuildingServiceImplement implements BuildingService {
 	
 	@Override
 	public List<BuildingDTO> findBuildings(Map<String, Object> params, List<String> typeCode) {
-		
-		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(params, typeCode); 
+		BuildingSearchBuilder builder = BuildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCode);
+		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(builder); 
 		
 		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
 		for(BuildingEntity it : receivedData) { 
