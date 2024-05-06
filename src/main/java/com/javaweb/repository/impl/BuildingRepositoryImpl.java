@@ -1,11 +1,6 @@
 package com.javaweb.repository.impl;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -14,11 +9,16 @@ import org.springframework.stereotype.Repository;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.repository.BuildingRepository;
-import com.javaweb.utils.GetDBConnectionUtil;
 import com.javaweb.utils.IsExistingParamUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepository {
+	@PersistenceContext
+	private EntityManager entityManager;
 
     void joinWithTables(BuildingSearchBuilder builder, StringBuilder query) {
     	Object obj;
@@ -50,7 +50,6 @@ public class BuildingRepositoryImpl implements BuildingRepository {
         	Field[] fields = BuildingSearchBuilder.class.getDeclaredFields();
         	for(Field item : fields) {
         		item.setAccessible(true);
-        		String fieldName = item.getName();
         		Object obj = item.get(builder);
         		String key = item.getName();
         		
@@ -119,44 +118,21 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<BuildingEntity> findBuildings(BuildingSearchBuilder builder) {
 
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT b.* FROM building b");
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT DISTINCT b.* FROM building b");
 
-        joinWithTables(builder, query);
-        selectConditions(builder, query);
+        joinWithTables(builder, sql);
+        selectConditions(builder, sql);
         
         // check query
-        System.out.println(query.toString());
+        System.out.println(sql.toString());
 
-        List<BuildingEntity> buildings = new ArrayList<>();
-        try (Connection conn = GetDBConnectionUtil.getConnection(); 
-        		Statement stm = conn.createStatement(); 
-        		ResultSet rs = stm.executeQuery(query.toString())) {
+        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 
-        	 while (rs.next()) {
-                 BuildingEntity buildingEntity = new BuildingEntity(); // Create an instance
-
-                 // Set properties
-                 buildingEntity.setId(rs.getLong("id"));
-                 buildingEntity.setName(rs.getString("name"));
-                 buildingEntity.setStreet(rs.getString("street"));
-                 buildingEntity.setWard(rs.getString("ward"));
-                 buildingEntity.setDistrictId(rs.getLong("districtid"));
-                 buildingEntity.setNumberOfBasement(rs.getLong("numberofbasement"));
-                 buildingEntity.setFloorArea(rs.getLong("floorarea"));
-                 buildingEntity.setManagerName(rs.getString("managername"));
-                 buildingEntity.setManagerPhoneNumber(rs.getString("managerphonenumber"));
-                 buildingEntity.setBrokerageFee(rs.getDouble("brokeragefee"));
-
-                 buildings.add(buildingEntity);
-             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return buildings;
+        return query.getResultList();
     }
 }

@@ -1,27 +1,29 @@
 package com.javaweb.builder;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingSearchBuilder {
-    private String name;
-    private String street;
-    private String ward;
-    private String districtName;
-    private Long numberOfBasement;
-    private Long floorArea;
-    private String direction;
-    private String level;
-    private Long rentPriceFrom;
-    private Long rentPriceTo;
-    private String managerName;
-    private String managerPhoneNumber;
-    private Long staffId;
-    private Long rentAreaFrom;
-    private Long rentAreaTo;
-    private List<String> typeCode = new ArrayList<>();
 
-    private BuildingSearchBuilder(Builder builder) {
+
+public class BuildingSearchBuilder {
+    private final String name;
+    private final String street;
+    private final String ward;
+    private final String districtName;
+    private final Long numberOfBasement;
+    private final Long floorArea;
+    private final String direction;
+    private final String level;
+    private final Long rentPriceFrom;
+    private final Long rentPriceTo;
+    private final String managerName;
+    private final String managerPhoneNumber;
+    private final Long staffId;
+    private final Long rentAreaFrom;
+    private final Long rentAreaTo;
+    private final List<String> typeCode;
+    
+
+    BuildingSearchBuilder(Builder builder) {
         this.name = builder.name;
         this.street = builder.street;
         this.ward = builder.ward;
@@ -103,7 +105,7 @@ public class BuildingSearchBuilder {
     public List<String> getTypeCode() {
         return typeCode;
     }
-
+    
     public static class Builder {
         private String name;
         private String street;
@@ -120,7 +122,7 @@ public class BuildingSearchBuilder {
         private Long staffId;
         private Long rentAreaFrom;
         private Long rentAreaTo;
-        private List<String> typeCode = new ArrayList<>();
+        private List<String> typeCode;
 
         public Builder setName(String name) {
             this.name = name;

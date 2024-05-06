@@ -12,8 +12,13 @@ import com.javaweb.utils.MapUtil;
 public class BuildingSearchBuilderConverter {
     public static BuildingSearchBuilder toBuildingSearchBuilder(Map<String, Object> params, List<String> typeCode) {
     	
+    	// another way
+//    	BuildingSearchBuilder.Builder builder1 = new BuildingSearchBuilder.Builder();
+//    	BuildingSearchBuilder builder = builder1.setName(), ...
+    	
         BuildingSearchBuilder builder = new BuildingSearchBuilder.Builder()
-                .setName(MapUtil.getObject(params, "street", String.class))
+        		.setName(MapUtil.getObject(params, "name", String.class))
+                .setStreet(MapUtil.getObject(params, "street", String.class))
                 .setWard(MapUtil.getObject(params, "ward", String.class))
                 .setDistrictName(MapUtil.getObject(params, "districtName", String.class))
                 .setNumberOfBasement(MapUtil.getObject(params, "numberOfBasement", Long.class))
