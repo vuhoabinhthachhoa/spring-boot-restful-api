@@ -49,6 +49,9 @@ public class BuildingEntity {
 	@Column(name = "floorarea")
 	private Long floorArea;
 	
+	@Column(name = "rentprice")
+	private Long rentPrice;
+	
 	@Column(name = "managername")
 	private String managerName;
 	

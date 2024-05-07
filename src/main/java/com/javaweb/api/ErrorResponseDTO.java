@@ -1,4 +1,4 @@
-package com.javaweb.DTO;
+package com.javaweb.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BuildingDTO {
-	 	private Long id;
-	 	private String name;
-	 	private Long districtId;
-	 	private Long rentPrice;
+public class ErrorResponseDTO {
+	private int status;
+    private String message;
 }

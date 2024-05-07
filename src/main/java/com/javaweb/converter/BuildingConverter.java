@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.RentAreaEntity;
-import com.javaweb.DTO.BuildingDTO;
+import com.javaweb.DTO.Response;
 
 @Component
 public class BuildingConverter {
@@ -30,8 +30,8 @@ public class BuildingConverter {
 	    return String.join(", ", values);
 	}
 	
-	public BuildingDTO BuildingEntityToBuildingDTO(BuildingEntity entity) {
-	    BuildingDTO DTO = modelMapper.map(entity, BuildingDTO.class);
+	public Response BuildingEntityToBuildingDTO(BuildingEntity entity) {
+	    Response DTO = modelMapper.map(entity, Response.class);
 	    DTO.setAddress(entity.getStreet() + ", "+ entity.getWard() + ", " + entity.getDistrict().getName()); // street, ward, district name
 	    DTO.setRentArea(convertRentAreasToString(entity.getRentAreas()));		   
 	    return DTO;
