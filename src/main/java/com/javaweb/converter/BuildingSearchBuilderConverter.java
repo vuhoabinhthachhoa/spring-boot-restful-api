@@ -20,7 +20,7 @@ public class BuildingSearchBuilderConverter {
         		.setName(MapUtil.getObject(params, "name", String.class))
                 .setStreet(MapUtil.getObject(params, "street", String.class))
                 .setWard(MapUtil.getObject(params, "ward", String.class))
-                .setDistrictName(MapUtil.getObject(params, "districtName", String.class))
+                .setDistrictId(MapUtil.getObject(params, "districtId", Long.class))
                 .setNumberOfBasement(MapUtil.getObject(params, "numberOfBasement", Long.class))
                 .setFloorArea(MapUtil.getObject(params, "floorArea", Long.class))
                 .setDirection(MapUtil.getObject(params, "direction", String.class))

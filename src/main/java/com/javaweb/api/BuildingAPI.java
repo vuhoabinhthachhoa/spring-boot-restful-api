@@ -35,7 +35,7 @@ public class BuildingAPI {
 
 	@GetMapping(value = "/api/findBuilding")
 	public List<Response> findBuilding(@RequestParam Map<String, Object> params,
-			@RequestParam(value = "typecode", required = false) List<String> typeCode) {
+			@RequestParam(value = "typeCode", required = false) List<String> typeCode) {
 		List<Response> result = buildingService.findBuildings(params, typeCode);
 		
 		return result;	
@@ -48,16 +48,12 @@ public class BuildingAPI {
 	
 	@PutMapping(value = "api/building")
 	public void updateBuilding(@RequestBody BuildingDTO buildingDTO) {
-		buildingService.updateBuilding(buildingDTO);
+		buildingService.createBuilding(buildingDTO);
 	}
 	
-	@DeleteMapping(value = "api/building/{id}")
-	public void deleteBuilding(@PathVariable Long id) {
-		buildingService.deleteBuilding(id);
+	@DeleteMapping(value = "api/building/{ids}")
+	public void deleteBuilding(@PathVariable Long[] ids) {
+		buildingService.deleteBuilding(ids);
 	}
 	
-//	@DeleteMapping(value = "api/building/{ids}/{name}")
-//	public void deleteBuilding(@PathVariable Long[] ids, @PathVariable String name) {
-//		buildingService.deleteBuilding(null);
-//	}
 }

@@ -1,4 +1,4 @@
-package com.javaweb.repository.impl;
+package com.javaweb.repository.custom.impl;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.builder.BuildingSearchBuilder;
-import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.utils.IsExistingParamUtil;
 
 import jakarta.persistence.EntityManager;
@@ -16,24 +16,17 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
 @Repository
-public class BuildingRepositoryImpl implements BuildingRepository {
+public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 
     void joinWithTables(BuildingSearchBuilder builder, StringBuilder query) {
-    	Object obj;
-        obj = builder.getRentAreaFrom();
-        String rentAreaFrom = (String) obj;
-        obj = builder.getRentAreaTo();
-        String rentAreaTo = (String) obj;
-        obj = builder.getStaffId();
-        String staffId = (String) obj;
 
-        if (IsExistingParamUtil.isExistingStringParam(rentAreaFrom)
-                || IsExistingParamUtil.isExistingStringParam(rentAreaTo)) {
+        if (IsExistingParamUtil.isExistingObjectParam(builder.getRentAreaFrom())
+                || IsExistingParamUtil.isExistingObjectParam(builder.getRentAreaTo())) {
             query.append(" JOIN rentarea ra ON ra.buildingid=b.id ");
         }
-        if (IsExistingParamUtil.isExistingStringParam(staffId)) {
+        if (IsExistingParamUtil.isExistingObjectParam(builder.getStaffId())) {
             query.append(" JOIN assignmentbuilding ab ON ab.buildingid=b.id ");
         }
         if (IsExistingParamUtil.isExistingListParam(builder.getTypeCode())) {
@@ -53,53 +46,53 @@ public class BuildingRepositoryImpl implements BuildingRepository {
         		Object obj = item.get(builder);
         		String key = item.getName();
         		
+        		
         		 if (key.equals("rentAreaFrom")) {
-        		     String value = (String)obj;        			 
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         query.append(" AND ra.value >= " + value);
+        			 
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         query.append(" AND ra.value >= " + obj);
                      }
                  }
                  if (key.equals("rentAreaTo")) {
-        		     String value = (String)obj;
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         query.append(" AND ra.value <= " + value);
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         query.append(" AND ra.value <= " + obj);
                      }
                  }
                  if (key.equals("staffId")) {
-                     String value = (String) obj;
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         query.append(" AND ab.staffid = " + value);
+                	 
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         query.append(" AND ab.staffid = " + obj);
                      }
                  }
                  if (key.equals("rentPriceFrom")) {
-                     String value = (String) obj;
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         query.append(" AND b.rentprice >= " + value);
+                     
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         query.append(" AND b.rentprice >= " + obj);
                      }
                  }
                  if (key.equals("rentPriceTo")) {
-                     String value = (String) obj;
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         query.append(" AND b.rentprice <= " + value);
+                     
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         query.append(" AND b.rentprice <= " + obj);
                      }
                  }
 
                  if (!key.equals("rentAreaFrom") && !key.equals("rentAreaTo")
                          && !key.equals("staffId") && !key.equals("rentPriceFrom")
                          && !key.equals("rentPriceTo") && !key.equals("typeCode")) {
-                     String value = (String) obj;
-                     if (IsExistingParamUtil.isExistingStringParam(value)) {
-                         if (value.matches("\\d+")) {
-                             query.append(" AND b." + key.toLowerCase() + " = " + value);
+                     
+                     if (IsExistingParamUtil.isExistingObjectParam(obj)) {
+                         if (obj instanceof Long) {
+                             query.append(" AND b." + key.toLowerCase() + " = " + obj);
                          } else {
-                             query.append(" AND b." + key.toLowerCase() + " LIKE '%" + value + "%'");
+                             query.append(" AND b." + key.toLowerCase() + " LIKE '%" + obj + "%'");
                          }
                      }
                  }
                  
                  if(key.equals("typeCode")) {
                 	 List<String> typeCode = (List<String>) obj;
-            		 if (IsExistingParamUtil.isExistingListParam(typeCode)) {
+                	 if (IsExistingParamUtil.isExistingListParam(typeCode)) {
                          StringJoiner codeNames = new StringJoiner(", ");
                          for (String codeName : typeCode) {
                              codeNames.add("N'" + codeName + "'");
@@ -136,3 +129,6 @@ public class BuildingRepositoryImpl implements BuildingRepository {
         return query.getResultList();
     }
 }
+
+
+

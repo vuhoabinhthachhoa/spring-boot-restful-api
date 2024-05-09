@@ -18,7 +18,9 @@ import jakarta.transaction.Transactional;
 
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.DistrictEntity;
+import com.javaweb.repository.entity.RentAreaEntity;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.DTO.BuildingDTO;
 import com.javaweb.DTO.Response;
 import com.javaweb.builder.BuildingSearchBuilder;
@@ -30,9 +32,13 @@ import com.javaweb.converter.BuildingSearchBuilderConverter;
 public class BuildingServiceImplement implements BuildingService {
 	
 	@Autowired
-	private BuildingRepository buidldingRepository;
+	private BuildingRepository buildingRepository;
+	
 	@Autowired
 	private BuildingConverter buildingConverter;
+	
+	@Autowired
+	private RentAreaRepository rentAreaRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -40,10 +46,11 @@ public class BuildingServiceImplement implements BuildingService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
+	
 	@Override
 	public List<Response> findBuildings(Map<String, Object> params, List<String> typeCode) {
 		BuildingSearchBuilder builder = BuildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCode);
-		List<BuildingEntity> receivedData = buidldingRepository.findBuildings(builder); 
+		List<BuildingEntity> receivedData = buildingRepository.findBuildings(builder); 
 		
 		List<Response> result = new ArrayList<Response>();
 		for(BuildingEntity it : receivedData) { 
@@ -51,48 +58,34 @@ public class BuildingServiceImplement implements BuildingService {
 		}
 		return result;
 	}
-	
+
 	@Override
-	@Transactional
 	public void createBuilding(BuildingDTO buildingDTO) {
-		DistrictEntity districtEntity = entityManager.find(DistrictEntity.class, buildingDTO.getDistrictId());
-		
-		if (districtEntity == null) {
-		    throw new DistrictNotFoundException("District with id " + buildingDTO.getDistrictId() + " does not exist");
-		}
-		
+		// we have to add building before adding corresponding rentareas and vice versa
+		// delete rentareas after deleting building
 		BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
-		buildingEntity.setDistrict(districtEntity);
-		entityManager.persist(buildingEntity);
+		buildingRepository.save(buildingEntity); // save: if there is id in DTO, will update, else there is no id it  will create
+		
+		List<Long> rentAreas = buildingDTO.getRentAreas();
+		if(rentAreas != null) {
+			for(Long rentArea : rentAreas) {
+				RentAreaEntity rentAreaEntity = new RentAreaEntity();
+				rentAreaEntity.setBuilding(buildingEntity);
+				rentAreaEntity.setValue(rentArea);
+				rentAreaRepository.save(rentAreaEntity);
+			}
+		}
+		
 	}
-	
+
 	@Override
-	@Transactional
-	public void updateBuilding(BuildingDTO buildingDTO) {
-		BuildingEntity buildingEntity = entityManager.find(BuildingEntity.class, buildingDTO.getId());
-		if(buildingEntity == null) {
-			throw new BuildingNotFoundException("Building with id " + buildingDTO.getId() + " does not exist");
+	public void deleteBuilding(Long[] ids) {
+		for(Long id : ids) {
+			BuildingEntity buildingEntity = buildingRepository.findById(id).get();
+			rentAreaRepository.deleteAllByBuilding(buildingEntity);
+			buildingRepository.deleteByIdIn(ids);
 		}
 		
-		DistrictEntity districtEntity = entityManager.find(DistrictEntity.class, buildingDTO.getDistrictId());
-		if (districtEntity == null) {
-		    throw new DistrictNotFoundException("District with id " + buildingDTO.getDistrictId() + " does not exist");
-		}
-		
-		modelMapper.map(buildingDTO, buildingEntity);
-		buildingEntity.setDistrict(districtEntity);
-		
-		entityManager.merge(buildingEntity);
 	}
-	
-	@Override
-	@Transactional
-	public void deleteBuilding(Long id) {
-		BuildingEntity buildingEntity = entityManager.find(BuildingEntity.class, id);
-		if(buildingEntity == null) {
-			throw new BuildingNotFoundException("Building with id " + id + " does not exist");
-		}
-		entityManager.remove(buildingEntity);
-	}
-	
+
 }

@@ -15,12 +15,8 @@ import jakarta.transaction.Transactional;
 public interface BuildingService {
 	public List<Response> findBuildings(Map<String, Object> params, List<String> typeCode);
 	
-	@Transactional
 	public void createBuilding(BuildingDTO buildingDTO);
 	
-	@Transactional
-	public void deleteBuilding(Long id);
-	
-	@Transactional
-	public void updateBuilding(BuildingDTO buildingDTO);
+	public void deleteBuilding(Long[] ids);
+
 }

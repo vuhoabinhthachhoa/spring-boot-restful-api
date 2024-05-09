@@ -8,7 +8,7 @@ public class BuildingSearchBuilder {
     private final String name;
     private final String street;
     private final String ward;
-    private final String districtName;
+    private final Long districtId;
     private final Long numberOfBasement;
     private final Long floorArea;
     private final String direction;
@@ -27,7 +27,7 @@ public class BuildingSearchBuilder {
         this.name = builder.name;
         this.street = builder.street;
         this.ward = builder.ward;
-        this.districtName = builder.districtName;
+        this.districtId = builder.districtId;
         this.numberOfBasement = builder.numberOfBasement;
         this.floorArea = builder.floorArea;
         this.direction = builder.direction;
@@ -54,8 +54,8 @@ public class BuildingSearchBuilder {
         return ward;
     }
 
-    public String getDistrictName() {
-        return districtName;
+    public Long getDistrictId() {
+        return districtId;
     }
 
     public Long getNumberOfBasement() {
@@ -110,7 +110,7 @@ public class BuildingSearchBuilder {
         private String name;
         private String street;
         private String ward;
-        private String districtName;
+        private Long districtId;
         private Long numberOfBasement;
         private Long floorArea;
         private String direction;
@@ -139,8 +139,8 @@ public class BuildingSearchBuilder {
             return this;
         }
 
-        public Builder setDistrictName(String districtName) {
-            this.districtName = districtName;
+        public Builder setDistrictId(Long districtId) {
+            this.districtId = districtId;
             return this;
         }
 
